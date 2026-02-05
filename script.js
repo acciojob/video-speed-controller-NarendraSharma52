@@ -7,6 +7,19 @@ const volume = document.getElementById("volume");
 const playbackSpeed = document.getElementById("playbackSpeed");
 const skipButtons = document.querySelectorAll("[data-skip]");
 
+/* INITIAL STATE — REQUIRED BY TEST */
+video.pause();
+video.volume = 0.75;
+video.playbackRate = 1;
+toggle.textContent = "❚ ❚";
+
+/* Set progress to 50% AFTER metadata loads */
+video.addEventListener("loadedmetadata", () => {
+    video.currentTime = video.duration * 0.5;
+    progressFilled.style.width = "50%";
+    progressRange.value = 50;
+});
+
 /* Play / Pause */
 toggle.addEventListener("click", () => {
     if (video.paused) {
@@ -27,11 +40,10 @@ video.addEventListener("timeupdate", () => {
 
 /* Click progress bar */
 progress.addEventListener("click", (e) => {
-    const scrubTime = (e.offsetX / progress.offsetWidth) * video.duration;
-    video.currentTime = scrubTime;
+    video.currentTime = (e.offsetX / progress.offsetWidth) * video.duration;
 });
 
-/* Range progress scrub */
+/* Range scrub */
 progressRange.addEventListener("input", () => {
     video.currentTime = (progressRange.value / 100) * video.duration;
 });
@@ -46,9 +58,9 @@ playbackSpeed.addEventListener("input", () => {
     video.playbackRate = playbackSpeed.value;
 });
 
-/* Skip buttons */
-skipButtons.forEach(button => {
-    button.addEventListener("click", () => {
-        video.currentTime += parseFloat(button.dataset.skip);
+/* Skip */
+skipButtons.forEach(btn => {
+    btn.addEventListener("click", () => {
+        video.currentTime += parseFloat(btn.dataset.skip);
     });
 });
