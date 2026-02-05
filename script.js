@@ -1,49 +1,45 @@
-const video = document.getElementById("video");
-const toggleButton = document.getElementById("toggle");
-const progressBar = document.getElementById("progress");
-const volumeController = document.getElementById("volume");
-const playbackSpeedController = document.getElementById("playbackSpeed");
-const rewindButton = document.getElementById("rewind");
-const skipButton = document.getElementById("skip");
+const video = document.querySelector(".player__video");
+const toggle = document.querySelector(".toggle");
+const progress = document.querySelector(".progress");
+const progressFilled = document.querySelector(".progress__filled");
+const sliders = document.querySelectorAll(".player__slider");
+const skipButtons = document.querySelectorAll("[data-skip]");
 
 /* Play / Pause */
-toggleButton.addEventListener("click", () => {
+function togglePlay() {
     if (video.paused) {
         video.play();
-        toggleButton.innerText = "❚ ❚";
+        toggle.textContent = "❚ ❚";
     } else {
         video.pause();
-        toggleButton.innerText = "►";
+        toggle.textContent = "►";
     }
-});
+}
 
-/* Update progress bar */
+toggle.addEventListener("click", togglePlay);
+
+/* Update progress */
 video.addEventListener("timeupdate", () => {
-    const progress = (video.currentTime / video.duration) * 100;
-    progressBar.value = progress;
+    const percent = (video.currentTime / video.duration) * 100;
+    progressFilled.style.width = `${percent}%`;
 });
 
-/* Scrub video */
-progressBar.addEventListener("input", () => {
-    video.currentTime = (progressBar.value / 100) * video.duration;
+/* Scrub */
+progress.addEventListener("click", e => {
+    const scrubTime = (e.offsetX / progress.offsetWidth) * video.duration;
+    video.currentTime = scrubTime;
 });
 
-/* Volume control */
-volumeController.addEventListener("input", () => {
-    video.volume = volumeController.value;
+/* Volume & Speed */
+sliders.forEach(slider => {
+    slider.addEventListener("input", () => {
+        video[slider.id === "volume" ? "volume" : "playbackRate"] = slider.value;
+    });
 });
 
-/* Playback speed */
-playbackSpeedController.addEventListener("input", () => {
-    video.playbackRate = playbackSpeedController.value;
-});
-
-/* Rewind 10 seconds */
-rewindButton.addEventListener("click", () => {
-    video.currentTime -= 10;
-});
-
-/* Skip 25 seconds */
-skipButton.addEventListener("click", () => {
-    video.currentTime += 25;
+/* Skip */
+skipButtons.forEach(button => {
+    button.addEventListener("click", () => {
+        video.currentTime += parseFloat(button.dataset.skip);
+    });
 });

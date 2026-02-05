@@ -1,31 +1,33 @@
-
-/* Your CSS Code here. */
-body {
-    background: #111;
-    color: #fff;
-    font-family: Arial, sans-serif;
-    display: flex;
-    justify-content: center;
-    margin-top: 40px;
+.player {
+    max-width: 750px;
+    margin: 40px auto;
 }
 
-.player {
-    width: 780px;
+.player__video {
+    width: 100%;
 }
 
 .controls {
     display: flex;
-    align-items: center;
     gap: 8px;
-    padding: 10px;
     background: #222;
+    padding: 10px;
 }
 
-button {
-    padding: 6px 10px;
+.progress {
+    flex: 1;
+    background: #555;
+    height: 8px;
     cursor: pointer;
 }
 
-input[type="range"] {
+.progress__filled {
+    width: 0%;
+    height: 100%;
+    background: #ffc600;
+}
+
+.player__button,
+.player__slider {
     cursor: pointer;
 }
